@@ -1,0 +1,34 @@
+from collections import defaultdict
+import heapq
+
+def top_frequent_words(file_path, k=10):
+    
+    word_count = defaultdict(int)
+
+    # Step 1: Count frequencies
+    with open(file_path, "r") as file:
+        for line in file:
+            word = line.strip()
+            if word:
+                word_count[word] += 1
+
+    # Step 2: Maintain top k using heap
+    heap = []
+
+    for word, freq in word_count.items():
+        heapq.heappush(heap, (freq, word))
+        
+        if len(heap) > k:
+            heapq.heappop(heap)
+
+    # Step 3: Sort results
+    result = sorted(heap, reverse=True)
+
+    return result
+
+
+# Example usage
+results = top_frequent_words("words.txt")
+
+for freq, word in results:
+    print(word, freq)
